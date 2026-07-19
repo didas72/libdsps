@@ -15,7 +15,7 @@ def rect_frame(width: float, length: float, height: float, frame_size: float) ->
     :return sp.OpenSCADObject: Generated grid, centered in X and Y, rests on Z=0
     """
     frame = sp.cube([width, length, height], center=True)
-    mask = sp.cube([width - frame_size*2, height - frame_size*2, height+XX], center=True)
+    mask = sp.cube([width - frame_size*2, length - frame_size*2, height+XX], center=True)
     frame = frame - mask
     frame = sp.up(height/2)(frame)
     return frame  # noqa: RET504
