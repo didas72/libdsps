@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "libdsps"
-version = "0.2.0"
+version = "0.2.1"
 authors = [{ name = "Didas72" }]
 description = "My personal set of utility function for building models with SolidPython2"
 readme = "README.md"
