@@ -2,11 +2,10 @@
 
 from math import ceil, cos, floor, radians, sin, sqrt
 
-import solid as sp
-import solid.utils as su
+import solid2 as sp
 
 
-def _inner_hex(radius: float, height: float, fill_ratio: float) -> sp.OpenSCADObject:
+def _inner_hex(radius: float, height: float, fill_ratio: float) -> sp.OpenSCADObjectPlus:
     points = []
     for a in range(6):
         angle = radians(a * 60)
@@ -14,14 +13,14 @@ def _inner_hex(radius: float, height: float, fill_ratio: float) -> sp.OpenSCADOb
         y = sin(angle)
         points.append((x, y))
 
-    hex_poly = su.polygon(points)
+    hex_poly = sp.polygon(points)
     outer = sp.scale((radius, radius, 1))(hex_poly)
     inner = sp.scale((1-fill_ratio, 1-fill_ratio, 1))(outer)
     hexagon = outer - inner
-    return su.linear_extrude(height)(hexagon)
+    return sp.linear_extrude(height)(hexagon)
 
 
-def hex_grid(width: float, length: float, height: float, stride: float, fill_ratio: float) -> sp.OpenSCADObject:
+def hex_grid(width: float, length: float, height: float, stride: float, fill_ratio: float) -> sp.OpenSCADObjectPlus:
     """
     Generate a partially filled grid of hexagons.
 
@@ -52,14 +51,14 @@ def hex_grid(width: float, length: float, height: float, stride: float, fill_rat
             y = y_base + y_i * hex_sizey
             y += hex_sizey/2 if x_i % 2 == 0 else 0
             cur_hex = hexagon
-            cur_hex = su.right(x)(cur_hex)
-            cur_hex = su.forward(y)(cur_hex)
-            cur_hex = su.color(((x_i+1) / (x_count+1), (y_i+1) / (y_count+1), 0))(cur_hex)
+            cur_hex = sp.right(x)(cur_hex)
+            cur_hex = sp.forward(y)(cur_hex)
+            cur_hex = sp.color(((x_i+1) / (x_count+1), (y_i+1) / (y_count+1), 0))(cur_hex)
             hexs.append(cur_hex)
 
-    grid = su.union()(*hexs)
-    bounds = su.cube([width, length, height], center=True)
-    bounds = su.up(height/2)(bounds)
+    grid = sp.union()(*hexs)
+    bounds = sp.cube([width, length, height], center=True)
+    bounds = sp.up(height/2)(bounds)
     grid = grid * bounds
     return grid  # noqa: RET504
 
